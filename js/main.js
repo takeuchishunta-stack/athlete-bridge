@@ -44,6 +44,21 @@
     return '<div class="ph-img ' + phClass + '"><span>写真: ' + escapeHtml(article.personName) + '様</span></div>';
   }
 
+  // 記事上部の大きな画像。横長の枠に写真全体を収め（引きの表示）、
+  // 余る左右は同じ写真をぼかして敷くことで埋める。
+  function renderHeroImage(article) {
+    if (!article.image) {
+      return '<div class="ph-img"><span>写真: ' + escapeHtml(article.personName) + '様</span></div>';
+    }
+    var src = escapeHtml(article.image);
+    return (
+      '<div class="article-hero-frame">' +
+        '<img class="article-hero-bg" src="' + src + '" alt="" aria-hidden="true">' +
+        '<img class="article-hero-img" src="' + src + '" alt="' + escapeHtml(article.personName) + '">' +
+      '</div>'
+    );
+  }
+
   function renderArticleCard(article) {
     return (
       '<a class="article-card" href="#' + escapeHtml(article.id) + '">' +
@@ -108,7 +123,7 @@
   function renderArticle(article) {
     var related = sortedArticles().filter(function (a) { return a.id !== article.id; });
 
-    document.getElementById('article-hero-wrap').innerHTML = renderCardImage(article, 'article-hero-img', '');
+    document.getElementById('article-hero-wrap').innerHTML = renderHeroImage(article);
     document.getElementById('article-meta').textContent = article.category + ' ｜ ' + formatDate(article.date);
     document.getElementById('article-title').textContent = article.title;
     document.getElementById('article-byline').textContent = article.company + '　' + article.personRole + '　' + article.personName;
