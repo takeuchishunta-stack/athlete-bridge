@@ -1,8 +1,38 @@
+# ATHLETE BRIDGE の Netlify 設定。
+# ダッシュボード設定よりこのファイルが優先されるため、公開設定はここで一元管理する。
+
 [build]
+  # ビルド不要の静的サイト。
   publish = "."
+  command = ""
+
+# 公開ディレクトリに入ってしまう運用ファイルは URL から到達できないようにする。
+[[redirects]]
+  from = "/scripts/*"
+  to = "/404.html"
+  status = 404
 
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# 画像とCSSは差し替えの頻度が低いので長めにキャッシュする。
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# js/ はキャッシュしない。articles.json が記事データ本体なので、
+# 長くキャッシュすると記事を追加しても読者にすぐ届かなくなる。
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

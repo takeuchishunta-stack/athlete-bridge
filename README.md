@@ -7,14 +7,17 @@
 ## 構成
 
 ```
-site/
-├── index.html        ページの骨格（一覧ビュー / 記事ビューの入れ物）
-├── css/style.css      全スタイル
+├── index.html             ページの骨格（一覧ビュー / 記事ビューの入れ物）
+├── 404.html               ページが見つからないとき
+├── css/style.css          全スタイル
 ├── js/
-│   ├── main.js         描画ロジック・ルーティング（#記事ID のハッシュ遷移）
-│   └── articles.json   記事データ ← 新しい記事はここを編集
-├── images/            記事のメイン画像
-└── netlify.toml       Netlify 用設定
+│   ├── main.js             描画ロジック・ルーティング（#記事ID のハッシュ遷移）
+│   └── articles.json       記事データ ← 新しい記事はここを編集
+├── images/                記事のメイン画像
+├── netlify.toml           Netlify の公開設定（ダッシュボード設定より優先される）
+└── scripts/
+    ├── publish.sh          検証つき公開スクリプト
+    └── check-site.mjs      サイト検証
 ```
 
 ## 記事を追加する
@@ -53,18 +56,64 @@ site/
 ビルド不要ですが、`fetch()` で `articles.json` を読み込むため `file://` では動きません。簡易サーバーで確認してください。
 
 ```bash
-cd site
 python3 -m http.server 8080
 # http://localhost:8080 を開く
 ```
 
-## Netlify へのデプロイ
+## 公開する
 
-このディレクトリ（`site/`）をそのまま Netlify にデプロイしてください。
+このリポジトリの `main` ブランチは Netlify に接続済みです。**push すると本番サイトが自動で更新されます。**
 
-- Netlify の UI から新規サイトを作成する場合: リポジトリを接続し、**Base directory** を `site`、**Publish directory** を `site`（または base 設定時は `.`）に設定します。ビルドコマンドは不要です（空欄でOK）。
-- Netlify CLI を使う場合:
-  ```bash
-  cd site
-  netlify deploy --prod
-  ```
+<https://superlative-centaur-49f503.netlify.app>
+
+手元ですることは1コマンドだけです。
+
+```bash
+./scripts/publish.sh "清野さんのインタビューを追加"
+```
+
+このスクリプトが順に、
+
+1. `scripts/check-site.mjs` でサイトと記事データを検証する（**エラーがあれば push せず停止**）
+2. 変更をすべてコミットする
+3. GitHub に push する（ネットワーク失敗時は最大4回まで自動リトライ）
+
+を行います。push が通れば Netlify のデプロイは自動で始まるので、以降の操作は不要です。
+コミットメッセージを省略すると「サイト更新」になります。
+
+`main` 以外のブランチにいるときは、その旨を表示したうえで push します（本番には反映されません）。
+
+### 公開せず検証だけする
+
+```bash
+node scripts/check-site.mjs
+```
+
+検出するものは次のとおりです。**エラーが1件でもあれば公開は中止**され、警告は公開を止めません。
+
+| 種別 | 内容 |
+| --- | --- |
+| エラー | `articles.json` のJSONが壊れている／配列でない／記事が0本 |
+| エラー | 記事の必須項目（`id` `category` `date` `title` `company` `personRole` `personName` `excerpt` `blocks`）が欠けている |
+| エラー | `id` が他の記事と重複している（片方の記事が開けなくなる） |
+| エラー | `date` が `YYYY-MM-DD` 形式でない |
+| エラー | 指定した `image` のファイルが存在しない |
+| エラー | `blocks` が空、`text` が無い、`link` なのに `url` が無い |
+| エラー | HTMLのリンク・CSS・JSの参照先が存在しない |
+| エラー | `<html lang>` / `<title>` / viewport の meta が無い |
+| 警告 | `blocks` の `type` が未対応（段落として表示されてしまう） |
+| 警告 | 画像が 800KB を超えている（表示が遅くなる） |
+| 警告 | `images/` に、どの記事からも参照されていない画像がある |
+| 警告 | meta description が無い |
+
+同じ検証は GitHub Actions（`.github/workflows/check-site.yml`）でも push のたびに走るので、
+スクリプトを使わず直接 push した場合も、壊れていれば GitHub 上で赤いチェックが付きます。
+
+### Netlify の設定を変えたいとき
+
+公開設定は `netlify.toml` に書いてあります。ダッシュボードで設定を変えてもこのファイルが
+優先されるため、変更するときは `netlify.toml` を編集して push してください。
+
+- 公開ディレクトリ: リポジトリ直下（ビルドコマンドなし）
+- `images/` は7日、`css/` は1日キャッシュ
+- `js/` はキャッシュしない（`articles.json` が記事データ本体のため、記事の追加をすぐ反映させる）
