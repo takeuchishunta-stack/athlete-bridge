@@ -19,11 +19,14 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# 画像とCSSは差し替えの頻度が低いので長めにキャッシュする。
+# 画像もキャッシュさせない。写真を差し替えるときは同じファイル名のまま
+# 中身だけ入れ替える運用なので、長く持たせると再訪問者に古い写真が出続ける。
+# ETag による問い合わせは残るため、中身が変わっていなければ 304 が返り、
+# 実際の転送量はほとんど増えない。
 [[headers]]
   for = "/images/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # css/ と js/ はキャッシュしない。理由が2つある。
 #   1. js/articles.json が記事データ本体で、長く持たせると記事の追加が読者に届かない
