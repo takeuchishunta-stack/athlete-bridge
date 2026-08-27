@@ -11,6 +11,10 @@ cd "$(dirname "$0")/.."
 MESSAGE="${1:-サイト更新}"
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
+echo "▶ CSS/JS の版番号を更新中..."
+node scripts/stamp-assets.mjs
+
+echo
 echo "▶ サイトを検証中..."
 node scripts/check-site.mjs
 
