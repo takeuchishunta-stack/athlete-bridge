@@ -4,96 +4,118 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ATHLETE BRIDGE｜アスリートのセカンドキャリアを、経営者が語る。</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0c'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23c9a961' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230F1E38'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23C9A961' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
 <meta name="description" content="スポーツで培った経験を活かせる企業と出会える。経験者の生の声から、あなたの次のステージを見つけよう。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=d479221e">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;500&family=Zen+Old+Mincho:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=014a4894">
 </head>
 <body>
 
-<div class="site-shell">
-
-  <header class="site-header">
-    <a href="#" id="logo-link" class="site-logo">ATHLETE BRIDGE</a>
-    <nav class="site-nav">
-      <a href="#" id="nav-home">記事一覧</a>
-      <a href="#" id="nav-category">カテゴリー</a>
-      <a href="#">このメディアについて</a>
-      <a href="#">お問い合わせ</a>
+<header class="site-header">
+  <div class="hd-inner">
+    <div class="hd-brand">
+      <a href="#top" class="hd-logo">Athlete bridge</a>
+      <span class="hd-rule"></span>
+      <span class="hd-tag">経営者インタビュー</span>
+    </div>
+    <nav class="hd-nav">
+      <a href="#latest">Interviews</a>
+      <a href="#latest">Series</a>
+      <a href="#newsletter">About</a>
+      <a href="#newsletter" class="hd-cta">購読する</a>
     </nav>
-  </header>
+  </div>
+  <div class="progress-track"><div class="progress-bar" data-progress></div></div>
+</header>
 
-  <main>
-    <!-- Top view: article list -->
-    <section id="view-top">
-      <div class="hero">
-        <div class="hero-eyebrow">ATHLETE BRIDGE</div>
-        <h1 class="hero-title">アスリートのセカンドキャリアを、<br>経営者が語る。</h1>
-        <div class="hero-divider"></div>
-        <p class="hero-desc">スポーツで培った経験を活かせる企業と出会える。経験者の生の声から、あなたの次のステージを見つけよう。</p>
+<main>
+
+  <!-- ===== トップ（注目記事＋一覧） ===== -->
+  <section id="view-top">
+
+    <div id="top" class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div id="hero-slot"></div>
+          <div class="hero-dots" id="hero-dots"></div>
+          <div class="hero-actions">
+            <button type="button" class="btn-primary" id="hero-read">
+              <span>記事を読む</span><span class="arrow">→</span>
+            </button>
+            <a href="#latest" class="btn-quiet">連載一覧を見る</a>
+          </div>
+        </div>
+        <div class="hero-media" id="hero-media"></div>
+      </div>
+    </div>
+
+    <div class="ticker">
+      <div class="ticker-track" id="ticker"></div>
+    </div>
+
+    <div class="wrap">
+      <div class="latest-head">
+        <h2 class="latest-title" data-reveal="mask">Latest Interviews</h2>
+        <span class="latest-range" id="latest-range" data-reveal="right" data-delay="150"></span>
       </div>
 
-      <div id="filter-bar" class="filter-bar"></div>
+      <div class="list" id="list"></div>
 
-      <div id="article-grid" class="article-grid"></div>
+      <div class="view-all-wrap">
+        <a href="#latest" class="view-all">すべての記事を見る <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </section>
 
-      <div id="no-results" class="no-results"></div>
+  <!-- ===== 記事ページ ===== -->
+  <section id="view-article" class="is-hidden">
+    <div class="wrap">
+      <div class="art-back"><button type="button" id="art-back">← 記事一覧に戻る</button></div>
 
-      <div class="newsletter-bar">
-        <div>
-          <div class="newsletter-heading">最新の経営者の言葉を、届けます。</div>
-          <form class="newsletter-form" id="newsletter-form">
-            <input type="email" id="newsletter-email" class="newsletter-input" placeholder="メールアドレス">
-            <button type="submit" id="newsletter-submit" class="newsletter-button">登録する</button>
-          </form>
+      <div class="art-head">
+        <div class="art-no-row">
+          <span class="art-no" id="art-no"></span>
+          <span class="art-rule"></span>
         </div>
-        <div class="social-row">
-          <div class="social-icon">X</div>
-          <div class="social-icon">in</div>
-          <div class="social-icon">FB</div>
-        </div>
+        <div class="art-meta" id="art-meta"></div>
+        <h1 class="art-title" id="art-title"></h1>
+        <div class="art-byline" id="art-byline"></div>
       </div>
 
-      <div class="site-copyright">© 2026 ATHLETE BRIDGE</div>
+      <figure class="art-figure" id="art-figure"></figure>
+
+      <div class="art-body" id="art-body"></div>
+
+      <div class="related">
+        <h2 class="related-title">Related Interviews</h2>
+        <div class="related-grid" id="related"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 共通の下部 ===== -->
+  <div class="wrap">
+    <section id="newsletter" class="newsletter" data-reveal>
+      <div>
+        <p class="nl-label">NEWSLETTER</p>
+        <h2 class="nl-title">次号の公開を、いちばん早く。</h2>
+      </div>
+      <form class="nl-form" id="newsletter-form">
+        <input type="email" class="nl-input" id="newsletter-email" placeholder="mail@example.com" aria-label="メールアドレス">
+        <button type="submit" class="nl-btn" id="newsletter-submit">登録する</button>
+      </form>
     </section>
 
-    <!-- Article view: single interview detail -->
-    <section id="view-article" class="is-hidden">
-      <div class="article-back">
-        <a href="#" id="article-back-link">← 記事一覧に戻る</a>
-      </div>
+    <footer class="site-footer">
+      <span class="ft-logo">Athlete bridge</span>
+      <span>© 2026 Athlete bridge</span>
+    </footer>
+  </div>
 
-      <div id="article-hero-wrap" class="article-hero-wrap"></div>
+</main>
 
-      <div class="article-content">
-        <div id="article-meta" class="article-meta"></div>
-        <h1 id="article-title" class="article-title"></h1>
-        <div class="article-byline">
-          <div id="article-byline"></div>
-        </div>
-
-        <div id="article-body" class="article-body"></div>
-
-        <div class="share-row">
-          <div class="share-label">この記事をシェア</div>
-          <div class="social-icon">X</div>
-          <div class="social-icon">FB</div>
-          <div class="social-icon is-line">LINE</div>
-        </div>
-      </div>
-
-      <div class="related-section">
-        <div class="related-heading">RELATED INTERVIEW</div>
-        <div id="related-grid" class="related-grid"></div>
-      </div>
-
-      <div class="site-copyright">© 2026 ATHLETE BRIDGE</div>
-    </section>
-  </main>
-
-</div>
-
-<script src="js/main.js?v=d479221e"></script>
+<script src="js/main.js?v=014a4894"></script>
 </body>
 </html>
