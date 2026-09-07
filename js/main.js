@@ -146,6 +146,14 @@
       case 'h':     return '<h2>' + escapeHtml(b.text) + '</h2>';
       case 'quote': return '<blockquote>' + escapeHtml(b.text) + '</blockquote>';
       case 'link':  return '<p class="article-link"><a href="' + escapeHtml(b.url) + '" target="_blank" rel="noopener">' + escapeHtml(b.text) + '</a></p>';
+      // 本文の途中に写真を差し込む。text は代替テキスト、caption があれば添え書きにする
+      case 'image': return '<figure class="body-figure">' +
+                      // width/height を入れておかないと、遅延読み込みの間だけ高さ0になり
+                      // 画像が入った瞬間に本文が飛ぶ
+                      '<img src="' + escapeHtml(b.src) + '" alt="' + escapeHtml(b.text) + '" loading="lazy"' +
+                        (b.width && b.height ? ' width="' + b.width + '" height="' + b.height + '"' : '') + '>' +
+                      (b.caption ? '<figcaption>' + escapeHtml(b.caption) + '</figcaption>' : '') +
+                    '</figure>';
       case 'p':
       default:
         var label = b.label ? '<strong>' + escapeHtml(b.label) + '：</strong>' : '';

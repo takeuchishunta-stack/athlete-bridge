@@ -561,6 +561,25 @@ img { display: block; max-width: 100%; }
   color: var(--ink);
   text-wrap: pretty;
 }
+/* 本文の途中に差し込む写真。本文より少し広げて、記事の流れに間を作る */
+.art-body .body-figure {
+  margin: 52px 0;
+  padding: 0;
+}
+.art-body .body-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--sunk, var(--panel));
+}
+.art-body .body-figure figcaption {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+
 .art-body .article-link a {
   color: var(--gold-deep);
   border-bottom: 1px solid var(--line-strong);

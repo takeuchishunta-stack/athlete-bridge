@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'scripts', '.github']);
 const ARTICLES = join(ROOT, 'js', 'articles.json');
-const BLOCK_TYPES = new Set(['p', 'h', 'quote', 'link']); // main.js の renderBlock が扱う種類
+const BLOCK_TYPES = new Set(['p', 'h', 'quote', 'link', 'image']); // main.js の renderBlock が扱う種類
 const LARGE_IMAGE_BYTES = 800 * 1024;
 
 const errors = [];
@@ -128,6 +128,23 @@ if (!existsSync(ARTICLES)) {
             }
             if (!block.text) errors.push(`${label}: blocks[${j}] に text がありません`);
             if (block.type === 'link' && !block.url) errors.push(`${label}: blocks[${j}] は link ですが url がありません`);
+            if (block.type === 'image') {
+              if (!block.src) {
+                errors.push(`${label}: blocks[${j}] は image ですが src がありません`);
+              } else {
+                usedImages.add(block.src);
+                const abs = join(ROOT, block.src);
+                if (!existsSync(abs)) {
+                  errors.push(`${label}: blocks[${j}] の画像が存在しません -> ${block.src}`);
+                } else if (statSync(abs).size > LARGE_IMAGE_BYTES) {
+                  errors.push(`${label}: blocks[${j}] の画像が大きすぎます -> ${block.src}`);
+                }
+                if (!block.width || !block.height) {
+                  // 寸法がないと遅延読み込み中の高さが0になり、読み込み時に本文がずれる
+                  warnings.push(`${label}: blocks[${j}] に width / height がありません（読み込み時に本文がずれます）`);
+                }
+              }
+            }
           });
         } else if (article.blocks !== undefined) {
           errors.push(`${label}: blocks は配列である必要があります`);
