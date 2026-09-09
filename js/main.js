@@ -61,7 +61,8 @@
         '<span class="hero-no">INTERVIEW ' + escapeHtml(a.no) + '</span>' +
         '<span class="hero-rule"></span>' +
       '</div>' +
-      '<h1 class="hero-title">' + escapeHtml(a.title) + '</h1>' +
+      // ヒーローは全記事で高さを揃えたいので、長い題名は heroTitle（短縮版）を使う。
+      '<h1 class="hero-title">' + escapeHtml(a.heroTitle || a.title) + '</h1>' +
       '<p class="hero-lead">' + escapeHtml(a.excerpt) + '</p>';
 
     el('hero-media').innerHTML =

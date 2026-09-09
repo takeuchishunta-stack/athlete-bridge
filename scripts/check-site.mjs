@@ -18,6 +18,10 @@ const LARGE_IMAGE_BYTES = 800 * 1024;
 const errors = [];
 const warnings = [];
 
+// ヒーロー（トップ最上部）の分量の目安。松岡さんの記事と同じくらいに収める。
+const HERO_TITLE_MAX = 50;
+const EXCERPT_MAX = 82;
+
 function htmlFiles(dir = ROOT) {
   const out = [];
   for (const name of readdirSync(dir)) {
@@ -98,6 +102,16 @@ if (!existsSync(ARTICLES)) {
         if (article.id) {
           if (seen.has(article.id)) errors.push(`${label}: id "${article.id}" が記事[${seen.get(article.id)}]と重複しています`);
           else seen.set(article.id, i);
+        }
+
+        // トップのヒーローは全記事で高さをそろえたいので、題名とリード文の分量を見張る。
+        // 上限を超えたら heroTitle（短縮版の題名）を足すか、リード文を削る。
+        const heroTitle = article.heroTitle || article.title || '';
+        if (heroTitle.length > HERO_TITLE_MAX) {
+          warnings.push(`${label}: ヒーローの題名が長すぎます（${heroTitle.length}文字 / 目安${HERO_TITLE_MAX}文字）。heroTitle に短縮版を追加してください`);
+        }
+        if (typeof article.excerpt === 'string' && article.excerpt.length > EXCERPT_MAX) {
+          warnings.push(`${label}: リード文が長すぎます（${article.excerpt.length}文字 / 目安${EXCERPT_MAX}文字）。ヒーローで末尾が切れます`);
         }
 
         if (article.date && !/^\d{4}-\d{2}-\d{2}$/.test(article.date)) {
