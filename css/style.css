@@ -555,22 +555,24 @@ img { display: block; max-width: 100%; }
   text-wrap: pretty;
 }
 .art-body p strong { font-weight: 500; color: var(--ink); }
+/* 小見出しは囲みの帯、本人の言葉は金の縦罫。書体と字送りは役割ごとのまま、
+   飾りだけを入れ替えている */
 .art-body h2 {
   margin: 62px 0 30px;
+  padding: 30px clamp(22px, 4vw, 40px);
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   font-family: var(--serif);
   font-weight: 400;
   font-size: 24px;
   line-height: 1.7;
   color: var(--ink);
-  padding-left: 18px;
-  border-left: 2px solid var(--gold);
 }
 .art-body blockquote {
   margin: 42px 0;
-  padding: 30px clamp(22px, 4vw, 40px);
-  background: var(--panel);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  padding-left: 18px;
+  border-left: 2px solid var(--gold);
   font-family: var(--mincho);
   font-size: 18px;
   line-height: 2;
